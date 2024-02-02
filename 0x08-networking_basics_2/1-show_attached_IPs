@@ -1,17 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Displays all active IPv4 addresses on the machine.
 
-# Get all network interfaces
-interfaces=$(ifconfig -a | grep -oE "^[a-zA-Z0-9]+" | tr '\n' ' ')
+# Use ifconfig to retrieve network interface information,
+# extract IPv4 addresses using grep and regular expressions,
+# and remove unnecessary characters using cut.
 
-# Loop through each interface and extract IPv4 addresses
-for interface in $interfaces; do
-	    ipv4_addresses=$(ifconfig $interface | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b" | grep -v '127.0.0.1')
-
-	        # Check if there are IPv4 addresses for this interface
-		    if [ -n "$ipv4_addresses" ]; then
-			            echo "IPv4 addresses for interface $interface:"
-				            echo "$ipv4_addresses"
-					            echo
-						        fi
-						done
-
+ifconfig | grep -Eo "inet (addr:)?([0-9]*\.){3}[0-9]*" | cut -b 11-
