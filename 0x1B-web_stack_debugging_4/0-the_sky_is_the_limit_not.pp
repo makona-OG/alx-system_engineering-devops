@@ -1,5 +1,11 @@
-# Fix Nginx limits
-exec { 'Limit':
-  command => '/usr/bin/env sed -i s/15/2000/ /etc/default/nginx',
+# puppet that increases the ULIMIT of nginx default from 15 to 4096
+
+#increase ULIMIT
+exec { 'increase-ulimit':
+    command => '/bin/sed -i \'s/ULIMIT="-n 15"/ULIMIT="-n 4096"/\' /etc/default/nginx',
 }
-exec { '/usr/bin/env service nginx restart': }
+
+#restart nginx
+exec { 'restart-nginx':
+    command => '/usr/sbin/service nginx restart'
+}
